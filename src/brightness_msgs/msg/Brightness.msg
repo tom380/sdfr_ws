@@ -1,0 +1,2 @@
+uint8 light_level
+string status
