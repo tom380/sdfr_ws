@@ -13,6 +13,7 @@
 
     <depend>rclcpp</depend>
     <depend>sensor_msgs</depend>
+    <depend>image_functions_sdfr</depend>
     <depend>brightness_msgs</depend>
 
     <test_depend>ament_lint_auto</test_depend>
