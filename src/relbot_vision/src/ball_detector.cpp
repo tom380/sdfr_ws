@@ -11,8 +11,12 @@
 using std::placeholders::_1;
 
 BallDetector::BallDetector() : Node("ball_detector") {
+    this->declare_parameter<std::string>("image_topic", "image");
+    std::string image_topic_name;
+    this->get_parameter("image_topic", image_topic_name);
+    
     // Subscribe to the image topic
-    image_sub = this->create_subscription<sensor_msgs::msg::Image>("image", 10, std::bind(&BallDetector::image_callback, this, _1));
+    image_sub = this->create_subscription<sensor_msgs::msg::Image>(image_topic_name, 10, std::bind(&BallDetector::image_callback, this, _1));
     // Create topic to publish brightness messages to
     ballDetection_pub = this->create_publisher<relbot_vision::msg::BallDetection>("ball_detection", 10);
 }
