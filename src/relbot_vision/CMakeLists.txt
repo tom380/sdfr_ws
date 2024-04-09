@@ -8,10 +8,26 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/BoundingBox.msg"
-  "msg/BallDetection.msg"
+"msg/BoundingBox.msg"
+"msg/BallDetection.msg"
+)
+
+include_directories(include)
+
+add_executable(ball_detector src/ball_detector.cpp)
+ament_target_dependencies(
+  ball_detector
+  rclcpp
+  sensor_msgs
+)
+
+install(TARGETS
+  ball_detector
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 if(BUILD_TESTING)
