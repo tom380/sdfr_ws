@@ -40,6 +40,7 @@ private:
 
     /// Publisher variables.
     rclcpp::Publisher<relbot_vision::msg::BallDetection>::SharedPtr ballDetection_pub;
+    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr debugImage_pub;
 };
 
 #endif /* BALL_DETECTOR_HPP */
