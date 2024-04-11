@@ -27,6 +27,9 @@ BallDetector::BallDetector() : Node("ball_detector") {
     this->declare_parameter<bool>("debug", false);
     this->get_parameter("debug", debug);
 
+    this->declare_parameter<double>("hue", 60);
+    this->get_parameter("hue", hue);
+
     // Subscribe to the image topic
     image_sub = this->create_subscription<sensor_msgs::msg::Image>(image_topic_name, 10, std::bind(&BallDetector::image_callback, this, _1));
     // Create topic to publish ball detection messages to
@@ -87,7 +90,7 @@ void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
         // Threshold the HSV image to get only the pre-known color
         cv::Mat mask;
         // HSV values H:0-180 S:0-255 V:0-255
-        cv::inRange(hsv_image, cv::Scalar(50, 64, 10), cv::Scalar(70, 255, 255), mask);
+        cv::inRange(hsv_image, cv::Scalar(0.0, 64, 10), cv::Scalar(180, 255, 255), mask);
 
         // You might want to apply some morphological operations to clean up the mask
         // cv::erode(mask, mask, cv::Mat(), cv::Point(-1, -1), 2);

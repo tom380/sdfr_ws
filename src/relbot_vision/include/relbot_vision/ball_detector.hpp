@@ -38,6 +38,7 @@ private:
     /// Private variables.
     bool debug;
     Method method;
+    double hue; //0-180
 
     /// Subscriber variables.
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub;
