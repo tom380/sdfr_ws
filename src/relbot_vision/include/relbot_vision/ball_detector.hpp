@@ -19,6 +19,8 @@
 // Placeholder for std::bind.
 using std::placeholders::_1;
 
+enum class Method {HOUGH_CIRCLES, BLOB};
+
 class BallDetector : public rclcpp::Node {
 public:
     BallDetector();
@@ -31,15 +33,17 @@ private:
      * @param img The image that was received.
     */
     void image_callback(sensor_msgs::msg::Image::ConstSharedPtr img);
+    Method stringToEnum(const std::string& mode) const;
 
     /// Private variables.
-
+    bool debug;
+    Method method;
 
     /// Subscriber variables.
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub;
 
     /// Publisher variables.
-    rclcpp::Publisher<relbot_vision::msg::BallDetection>::SharedPtr ballDetection_pub;
+    rclcpp::Publisher<relbot_vision::msg::BallDetection>::SharedPtr detection_pub;
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr debugImage_pub;
 };
 
