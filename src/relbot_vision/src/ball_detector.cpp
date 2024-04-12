@@ -38,10 +38,37 @@ BallDetector::BallDetector() : Node("ball_detector") {
     if (debug) debugImage_pub = this->create_publisher<sensor_msgs::msg::Image>("ball_detector/debug_image", 10);
 }
 
+cv::Mat generateDebug(cv::Mat original_image, cv::Mat mask) {
+    // Convert the original image to grayscale
+    cv::Mat gray_image;
+    cv::cvtColor(original_image, gray_image, cv::COLOR_BGR2GRAY);
+    cv::cvtColor(gray_image, gray_image, cv::COLOR_GRAY2BGR); // Convert back to BGR for bitwise operations
+
+    // Create the result image
+    cv::Mat result = cv::Mat::zeros(original_image.size(), original_image.type());
+
+    // Apply the mask to the original image to get the colored regions
+    cv::Mat colored_parts;
+    cv::bitwise_and(original_image, original_image, colored_parts, mask);
+
+    // Invert the mask to combine with the grayscale image
+    cv::Mat inverted_mask;
+    cv::bitwise_not(mask, inverted_mask);
+
+    // Apply the inverted mask to the grayscale image to get the grayscale regions
+    cv::Mat gray_parts;
+    cv::bitwise_and(gray_image, gray_image, gray_parts, inverted_mask);
+
+    // Combine the two parts
+    cv::add(colored_parts, gray_parts, result);
+
+    return result;
+}
+
 void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
     cv_bridge::CvImagePtr cv_ptr;
     try {
-        cv_ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::RGB8);
+        cv_ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::BGR8);
     } catch (cv_bridge::Exception& e) {
         RCLCPP_ERROR(this->get_logger(), "cv_bridge exception: %s", e.what());
         return;
@@ -70,7 +97,7 @@ void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
         params.maxArea = img->height*img->width;
         // Filter by Circularity
         params.filterByCircularity = true;
-        params.minCircularity = 0.7; // Adjust this value to match your target's circularity
+        params.minCircularity = 0.6; // Adjust this value to match your target's circularity
         // Filter by Color
         params.filterByColor = true;
         params.blobColor = 255; // Assuming the blobs are white on a darker background
@@ -78,7 +105,7 @@ void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
         params.filterByConvexity = false;
         // Filter by Inertia
         params.filterByInertia = false;
-        params.minInertiaRatio = 0.5; // Adjust based on your target's inertia ratio
+        params.minInertiaRatio = 0.75; // Adjust based on your target's inertia ratio
 
         // Create a blob detector with the above parameters
         cv::Ptr<cv::SimpleBlobDetector> detector = cv::SimpleBlobDetector::create(params);
@@ -90,20 +117,24 @@ void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
         // Threshold the HSV image to get only the pre-known color
         cv::Mat mask;
         // HSV values H:0-180 S:0-255 V:0-255
-        cv::inRange(hsv_image, cv::Scalar(0.0, 64, 10), cv::Scalar(180, 255, 255), mask);
+        cv::inRange(hsv_image, cv::Scalar(hue - 10, 128, 50), cv::Scalar(hue + 10, 255, 255), mask);
 
         // You might want to apply some morphological operations to clean up the mask
-        // cv::erode(mask, mask, cv::Mat(), cv::Point(-1, -1), 2);
-        // cv::dilate(mask, mask, cv::Mat(), cv::Point(-1, -1), 2);
+        cv::Mat kernel3 = cv::getStructuringElement(cv::MORPH_ELLIPSE,cv::Size(5,5));
+        cv::Mat kernel5 = cv::getStructuringElement(cv::MORPH_ELLIPSE,cv::Size(5,5));
+        //cv::dilate(mask, mask, kernel3, cv::Point(-1, -1), 1);
+        cv::erode(mask, mask, kernel5, cv::Point(-1, -1), 3);
+        cv::dilate(mask, mask, kernel5, cv::Point(-1, -1), 3);
 
         // Detect blobs
         std::vector<cv::KeyPoint> keypoints;
         detector->detect(mask, keypoints);
 
         // Visualize detected blobs
-        cv::Mat im_with_keypoints;
-        cv::drawKeypoints(cv_ptr->image, keypoints, im_with_keypoints, cv::Scalar(0,255,0), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
-        cv_ptr->image = im_with_keypoints;
+        cv_ptr->image = generateDebug(cv_ptr->image, mask);
+        // cv::Mat im_with_keypoints;
+        // cv::drawKeypoints(cv_ptr->image, keypoints, im_with_keypoints, cv::Scalar(0,255,0), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
+        // cv_ptr->image = im_with_keypoints;
 
         for (const auto& keypoint : keypoints) {
             float x = keypoint.pt.x;
@@ -116,6 +147,7 @@ void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
     }
 
     RCLCPP_INFO(this->get_logger(), "Amount of found circles: %li", circles.size());
+    
 
     relbot_vision::msg::BallDetection ball_detection_msg;
     ball_detection_msg.found = false;
@@ -136,11 +168,12 @@ void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
         int height = circle[2] * 2;
 
         // Draw the bounding box
-        cv::rectangle(cv_ptr->image, cv::Point(x, y), cv::Point(x + width, y + height), cv::Scalar(0, 255, 0), 3);
+        cv::rectangle(cv_ptr->image, cv::Point(x, y), cv::Point(x + width, y + height), cv::Scalar(0, 0, 255), 3);
     }
 
     detection_pub->publish(ball_detection_msg);
     if (debug) {
+        cv::cvtColor(cv_ptr->image, cv_ptr->image, cv::COLOR_BGR2RGB);
         sensor_msgs::msg::Image::SharedPtr msg = cv_ptr->toImageMsg();
         debugImage_pub->publish(*msg);
     }
