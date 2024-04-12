@@ -12,6 +12,7 @@
 #include <functional>
 #include <memory>
 #include "rclcpp/rclcpp.hpp"
+#include <opencv2/opencv.hpp>
 
 #include "sensor_msgs/msg/image.hpp"
 #include "relbot_vision/msg/ball_detection.hpp"
@@ -19,13 +20,14 @@
 // Placeholder for std::bind.
 using std::placeholders::_1;
 
-enum class Method {HOUGH_CIRCLES, BLOB};
-
 class BallDetector : public rclcpp::Node {
 public:
     BallDetector();
 
 private:
+    // Detection methods
+    enum class Method {HOUGH_CIRCLES, BLOB};
+
     /// Callback functions.
     /**
      * @brief Callback to process any incoming Image messages.
@@ -33,12 +35,18 @@ private:
      * @param img The image that was received.
     */
     void image_callback(sensor_msgs::msg::Image::ConstSharedPtr img);
-    Method stringToEnum(const std::string& mode) const;
+
+    /// Utility functions
+    // Convert string to repective method
+    Method stringToMethod(const std::string& mode) const;
+    // Decolourize everything that is not in mask
+    cv::Mat colourMask(cv::Mat original_image, cv::Mat mask);
 
     /// Private variables.
     bool debug;
     Method method;
-    double hue; //0-180
+    cv::Ptr<cv::SimpleBlobDetector> detector;
+    double hue;
 
     /// Subscriber variables.
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub;
