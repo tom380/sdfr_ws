@@ -30,6 +30,14 @@ VelocityController::VelocityController() : Node("velocity_controller") {
     this->declare_parameter<bool>("debug", false);
     this->get_parameter("debug", debug);
 
+    // Set target size
+    this->declare_parameter<float>("target_size", 200);
+    this->get_parameter("target_size", target_size);
+
+    // Set target size
+    this->declare_parameter<float>("target_position", 320);
+    this->get_parameter("target_position", target_position);
+
 
     // Subscribe to topics
     detection_sub = this->create_subscription<relbot_vision::msg::BallDetection>(detection_topic_name, 10, std::bind(&VelocityController::detection_callback, this, _1));
