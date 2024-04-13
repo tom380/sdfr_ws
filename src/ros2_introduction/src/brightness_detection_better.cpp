@@ -11,7 +11,7 @@
 
 using std::placeholders::_1;
 
-BrightnessDetectionBetter::BrightnessDetectionBetter() : Node("brightness_detection") {
+BrightnessDetectionBetter::BrightnessDetectionBetter() : Node("brightness_detection_better") {
     // Subscribe to the image topic
     image_sub = this->create_subscription<sensor_msgs::msg::Image>("image", 10, std::bind(&BrightnessDetectionBetter::image_callback, this, _1));
     // Create topic to publish brightness messages to
