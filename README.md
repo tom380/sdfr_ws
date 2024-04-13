@@ -26,3 +26,6 @@ This assignment is not part of this workspace, as it only contained standard ROS
 
 ### 2 Brightness Detection
 For this assignment two nodes were made, `brightness_detection` and `brightness_detection_better`, more information and the execution of these nodes can be found in the `ros2_introduction` package [README.md](src/ros2_introduction/README.md).
+
+### 3 Ball Detection
+For this assignment the node `ball_detector` was made, more information and the execution of this node can be found in the `relbot_vision` package [README.md](src/relbot_vision/README.md).
