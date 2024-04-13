@@ -13,7 +13,7 @@ find_package(relbot_vision REQUIRED)
 
 include_directories(include)
 
-add_executable(velocity_controller src/velocity_controller)
+add_executable(velocity_controller src/velocity_controller.cpp)
 ament_target_dependencies(
   velocity_controller
   rclcpp

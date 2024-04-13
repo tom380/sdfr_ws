@@ -6,7 +6,8 @@
 // Description : Implementation of the BrightnessDetectionBetter node
 //=============================================
 
-#include "relbot_control/velocity_controller.hpp"
+#include "../include/relbot_control/velocity_controller.hpp"
+// #include "relbot_control/velocity_controller.hpp"
 #include <stdexcept>
 #include <algorithm>
 
@@ -35,8 +36,12 @@ void VelocityController::detection_callback(relbot_vision::msg::BallDetection::C
 
     float linear_gain = 1; // meters per pixels per seconds
     float angular_gain = 1; // radians per pixels per seconds
+
     geometry_msgs::msg::TwistStamped velocity_msg;
-    velocity_msg.
+    velocity_msg.twist.linear.x = linear_gain * size_error;
+    velocity_msg.twist.angular.z = angular_gain * position_error;
+
+    velocity_pub->publish(velocity_msg);
 }
 
 
