@@ -13,6 +13,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(relbot_vision REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(std_msgs REQUIRED)
 
 include_directories(include)
 
@@ -27,8 +28,17 @@ ament_target_dependencies(
   OpenCV
 )
 
+add_executable(differential_controller src/differential_controller.cpp)
+ament_target_dependencies(
+  differential_controller
+  rclcpp
+  geometry_msgs
+  std_msgs
+)
+
 install(TARGETS
   velocity_controller
+  differential_controller
   DESTINATION lib/${PROJECT_NAME}
 )
 
