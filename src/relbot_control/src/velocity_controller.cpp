@@ -44,8 +44,8 @@ VelocityController::VelocityController() : Node("velocity_controller") {
     if (debug) image_sub = this->create_subscription<sensor_msgs::msg::Image>(image_topic_name, 10, std::bind(&VelocityController::image_callback, this, _1));
 
     // Create topics to publish to
-    velocity_pub = this->create_publisher<geometry_msgs::msg::TwistStamped>("velocity_controller/velocity", 10);
-    if (debug) debugImage_pub = this->create_publisher<sensor_msgs::msg::Image>("velocity_controller/debug_image", 10);
+    velocity_pub = this->create_publisher<geometry_msgs::msg::TwistStamped>("/velocity_controller/velocity", 10);
+    if (debug) debugImage_pub = this->create_publisher<sensor_msgs::msg::Image>("/velocity_controller/debug_image", 10);
 }
 
 void VelocityController::detection_callback(relbot_vision::msg::BallDetection::ConstSharedPtr detection) {
