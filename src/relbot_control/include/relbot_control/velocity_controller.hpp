@@ -34,6 +34,8 @@ private:
     bool debug;
     float target_size; // pixels
     float target_position; // pixels
+    float linear_gain;
+    float angular_gain;
 
     /// Subscriber variables.
     rclcpp::Subscription<relbot_vision::msg::BallDetection>::SharedPtr detection_sub;

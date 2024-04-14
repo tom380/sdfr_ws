@@ -34,9 +34,17 @@ VelocityController::VelocityController() : Node("velocity_controller") {
     this->declare_parameter<float>("target_size", 200);
     this->get_parameter("target_size", target_size);
 
-    // Set target size
+    // Set target position
     this->declare_parameter<float>("target_position", 320);
     this->get_parameter("target_position", target_position);
+
+    // Set linear gain
+    this->declare_parameter<float>("linear_gain", 0.01); // meters per pixels per seconds
+    this->get_parameter("linear_gain", linear_gain);
+
+    // Set angular gain
+    this->declare_parameter<float>("angular_gain", 1); // radians per pixels per seconds
+    this->get_parameter("angular_gain", angular_gain);
 
 
     // Subscribe to topics
@@ -53,9 +61,6 @@ void VelocityController::detection_callback(relbot_vision::msg::BallDetection::C
     float position_error = target_position - detection->bounding_box.centre_x;
 
     RCLCPP_INFO(rclcpp::get_logger("velocity_controller"), "Size error: %f\tPosition error:%f", size_error, position_error);
-
-    float linear_gain = 1; // meters per pixels per seconds
-    float angular_gain = 1; // radians per pixels per seconds
 
     geometry_msgs::msg::TwistStamped velocity_msg;
     velocity_msg.twist.linear.x = linear_gain * size_error;
