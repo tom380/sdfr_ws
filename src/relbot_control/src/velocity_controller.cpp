@@ -1,9 +1,9 @@
 //=============================================
-// Filename    : brightness_detection_better.cpp
+// Filename    : velocity_controller.cpp
 // Authors     : Tom Fransen & Lute Golbach
 // Group       : 9
 // License     : N.A.
-// Description : Implementation of the BrightnessDetectionBetter node
+// Description : Implementation of the VelocityController node
 //=============================================
 
 #include "../include/relbot_control/velocity_controller.hpp"
