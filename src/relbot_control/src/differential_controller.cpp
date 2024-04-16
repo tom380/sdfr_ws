@@ -14,7 +14,7 @@ using std::placeholders::_1;
 
 DifferentialController::DifferentialController() : Node("differential_controller") {
     // Set inra-wheel distance
-    this->declare_parameter<double>("intra_wheel_width", 0.1);
+    this->declare_parameter<double>("intra_wheel_width", 0.209);
     this->get_parameter("intra_wheel_width", width);
 
     // Set wheel radius
@@ -34,8 +34,8 @@ void DifferentialController::velocity_callback(geometry_msgs::msg::TwistStamped:
     double V = velocity->twist.linear.x;
     double omega = velocity->twist.angular.z;
 
-    if (V < 0.001) V = 0;
-    if (omega < 0.01) omega = 0;
+    // if (V < 0.001) V = 0;
+    // if (omega < 0.01) omega = 0;
 
     example_interfaces::msg::Float64 leftMotor_msg;
     leftMotor_msg.data = (V - omega * width / 2.0) / wheel_radius;
