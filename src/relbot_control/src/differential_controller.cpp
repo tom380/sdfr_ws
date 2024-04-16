@@ -40,7 +40,7 @@ void DifferentialController::velocity_callback(geometry_msgs::msg::TwistStamped:
     example_interfaces::msg::Float64 leftMotor_msg;
     leftMotor_msg.data = (V - omega * width / 2.0) / wheel_radius;
     example_interfaces::msg::Float64 rightMotor_msg;
-    rightMotor_msg.data = (V = omega * width / 2.0) / wheel_radius;
+    rightMotor_msg.data = (V + omega * width / 2.0) / wheel_radius;
 
     leftMotor_pub->publish(leftMotor_msg);
     rightMotor_pub->publish(rightMotor_msg);
