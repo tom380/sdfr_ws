@@ -4,7 +4,20 @@ from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction
 from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
+    linear_gain_arg: DeclareLaunchArgument = DeclareLaunchArgument(
+        'linear_gain',
+        default_value='0.005',
+        description='Gain of size error to linear velocity'
+    )
+    angular_gain_arg: DeclareLaunchArgument = DeclareLaunchArgument(
+        'angular_gain',
+        default_value='0.005',
+        description='Gain of position error to angular velocity'
+    )
+
     return launch.LaunchDescription([
+        linear_gain_arg,
+        angular_gain_arg,
         DeclareLaunchArgument(
             'image_rosbag',
             default_value='',
@@ -35,8 +48,8 @@ def generate_launch_description():
             parameters=[
                 {'target_size': 100.0},
                 {'target_position': 80.0},
-                {'linear_gain': 0.001},
-                {'angular_gain': 0.01},
+                {'linear_gain': LaunchConfiguration('linear_gain')},
+                {'angular_gain': LaunchConfiguration('angular_gain')},
                 {'debug': True}
             ],
             arguments=['--ros-args', '--log-level', 'INFO'],
