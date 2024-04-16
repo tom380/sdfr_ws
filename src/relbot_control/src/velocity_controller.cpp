@@ -57,12 +57,17 @@ VelocityController::VelocityController() : Node("velocity_controller") {
 }
 
 void VelocityController::detection_callback(relbot_vision::msg::BallDetection::ConstSharedPtr detection) {
+    geometry_msgs::msg::TwistStamped velocity_msg;
+    if (!detection->found) {
+        velocity_pub->publish(velocity_msg);
+        return;
+    }
+    
     float size_error = target_size - std::max(detection->bounding_box.width, detection->bounding_box.height);
     float position_error = target_position - detection->bounding_box.centre_x;
 
     RCLCPP_INFO(rclcpp::get_logger("velocity_controller"), "Size error: %f\tPosition error:%f", size_error, position_error);
 
-    geometry_msgs::msg::TwistStamped velocity_msg;
     velocity_msg.twist.linear.x = linear_gain * size_error;
     velocity_msg.twist.angular.z = angular_gain * position_error;
 
