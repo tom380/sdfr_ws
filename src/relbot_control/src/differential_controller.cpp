@@ -26,8 +26,8 @@ DifferentialController::DifferentialController() : Node("differential_controller
     velocity_sub = this->create_subscription<geometry_msgs::msg::TwistStamped>("/velocity_controller/velocity", 10, std::bind(&DifferentialController::velocity_callback, this, _1));
     
     // Create topics to publish to
-    leftMotor_pub = this->create_publisher<std_msgs::msg::Float64>("/input/left_motor/setpoint_vel", 10);
-    rightMotor_pub = this->create_publisher<std_msgs::msg::Float64>("/input/right_motor/setpoint_vel", 10);
+    leftMotor_pub = this->create_publisher<example_interfaces::msg::Float64>("/input/left_motor/setpoint_vel", 10);
+    rightMotor_pub = this->create_publisher<example_interfaces::msg::Float64>("/input/right_motor/setpoint_vel", 10);
 }
 
 void DifferentialController::velocity_callback(geometry_msgs::msg::TwistStamped::ConstSharedPtr velocity){
@@ -37,9 +37,9 @@ void DifferentialController::velocity_callback(geometry_msgs::msg::TwistStamped:
     if (V < 0.001) V = 0;
     if (omega < 0.01) omega = 0;
 
-    std_msgs::msg::Float64 leftMotor_msg;
+    example_interfaces::msg::Float64 leftMotor_msg;
     leftMotor_msg.data = (V - omega * width / 2.0) / wheel_radius;
-    std_msgs::msg::Float64 rightMotor_msg;
+    example_interfaces::msg::Float64 rightMotor_msg;
     rightMotor_msg.data = (V = omega * width / 2.0) / wheel_radius;
 
     leftMotor_pub->publish(leftMotor_msg);

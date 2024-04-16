@@ -14,7 +14,7 @@
 #include "rclcpp/rclcpp.hpp"
 
 #include "geometry_msgs/msg/twist_stamped.hpp"
-#include "std_msgs/msg/float64.hpp"
+#include "example_interfaces/msg/float64.hpp"
 
 // Placeholder for std::bind.
 using std::placeholders::_1;
@@ -35,8 +35,8 @@ private:
     rclcpp::Subscription<geometry_msgs::msg::TwistStamped>::SharedPtr velocity_sub;
 
     /// Publisher variables.
-    rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr leftMotor_pub;
-    rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr rightMotor_pub;
+    rclcpp::Publisher<example_interfaces::msg::Float64>::SharedPtr leftMotor_pub;
+    rclcpp::Publisher<example_interfaces::msg::Float64>::SharedPtr rightMotor_pub;
 };
 
 #endif /* DIFFERENTIAL_CONTROLLER_HPP */

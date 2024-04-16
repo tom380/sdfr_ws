@@ -13,7 +13,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(relbot_vision REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
-find_package(std_msgs REQUIRED)
+find_package(example_interfaces REQUIRED)
 
 include_directories(include)
 
@@ -33,7 +33,7 @@ ament_target_dependencies(
   differential_controller
   rclcpp
   geometry_msgs
-  std_msgs
+  example_interfaces
 )
 
 install(TARGETS
