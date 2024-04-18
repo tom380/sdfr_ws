@@ -52,8 +52,8 @@ def generate_launch_description():
             package='relbot_control',
             executable='velocity_controller',
             parameters=[
-                {'target_size': 100.0},
-                {'target_position': 80.0},
+                {'target_size': 90.0},
+                {'target_position': 90.0},
                 {'linear_gain': LaunchConfiguration('linear_gain')},
                 {'angular_gain': LaunchConfiguration('angular_gain')},
                 {'debug': True}
