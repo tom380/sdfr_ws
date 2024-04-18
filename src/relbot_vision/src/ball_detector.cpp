@@ -65,10 +65,14 @@ void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
     // Convert ROS message to openCV image
     cv_bridge::CvImagePtr cv_ptr;
     try {
-        cv_ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::BGR8);
+        cv_ptr = cv_bridge::toCvCopy(img, img->encoding);
     } catch (cv_bridge::Exception& e) {
         RCLCPP_ERROR(this->get_logger(), "cv_bridge exception: %s", e.what());
         return;
+    }
+
+    if (cv_ptr->encoding == "rgb8") {
+        cv::cvtColor(cv_ptr->image, cv_ptr->image, cv::COLOR_RGB2BGR);
     }
 
     // Vector to store detected circles
@@ -166,6 +170,7 @@ void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
     detection_pub->publish(ball_detection_msg);
     if (debug) {
         cv::cvtColor(cv_ptr->image, cv_ptr->image, cv::COLOR_BGR2RGB);
+        cv_ptr->encoding = "rgb8";
         sensor_msgs::msg::Image::SharedPtr msg = cv_ptr->toImageMsg();
         debugImage_pub->publish(*msg);
     }
