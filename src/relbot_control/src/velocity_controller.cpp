@@ -84,6 +84,10 @@ void VelocityController::image_callback(sensor_msgs::msg::Image::ConstSharedPtr 
         return;
     }
 
+    if (cv_ptr->encoding == "rgb8") {
+        cv::cvtColor(cv_ptr->image, cv_ptr->image, cv::COLOR_RGB2BGR);
+    }
+
     // Calculate bounding box coordinates
     cv::Point left_up(target_position - target_size/2, image->height/2 - target_size/2);
     cv::Point right_down(target_position + target_size/2, image->height/2 + target_size/2);   
@@ -92,6 +96,7 @@ void VelocityController::image_callback(sensor_msgs::msg::Image::ConstSharedPtr 
     cv::rectangle(cv_ptr->image, left_up, right_down, cv::Scalar(0, 0, 255), 3);
 
     cv::cvtColor(cv_ptr->image, cv_ptr->image, cv::COLOR_BGR2RGB);
+    cv_ptr->encoding = "rgb8";
     sensor_msgs::msg::Image::SharedPtr msg = cv_ptr->toImageMsg();
     debugImage_pub->publish(*msg);
 }
