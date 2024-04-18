@@ -14,10 +14,16 @@ def generate_launch_description():
         default_value='0.005',
         description='Gain of position error to angular velocity'
     )
+    hue_arg: DeclareLaunchArgument = DeclareLaunchArgument(
+        'hue',
+        default_value='60.0',
+        description='Hue of the ball'
+    )
 
     return launch.LaunchDescription([
         linear_gain_arg,
         angular_gain_arg,
+        hue_arg,
         DeclareLaunchArgument(
             'image_rosbag',
             default_value='',
@@ -36,7 +42,7 @@ def generate_launch_description():
             parameters=[
                 {'image_topic': '/output/moving_camera'},
                 {'method': 'BLOB'},
-                {'hue': 20.0},
+                {'hue': LaunchConfiguration('hue')},
                 {'debug': True}
             ],
             arguments=['--ros-args', '--log-level', 'WARN'],
