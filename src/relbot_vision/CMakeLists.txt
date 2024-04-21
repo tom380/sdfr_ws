@@ -12,6 +12,7 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(image_functions_sdfr REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
 "msg/BoundingBox.msg"
@@ -27,6 +28,7 @@ ament_target_dependencies(
   sensor_msgs
   cv_bridge
   OpenCV
+  image_functions_sdfr
 )
 
 install(TARGETS

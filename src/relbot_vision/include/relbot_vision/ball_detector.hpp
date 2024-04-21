@@ -26,7 +26,7 @@ public:
 
 private:
     // Detection methods
-    enum class Method {HOUGH_CIRCLES, BLOB};
+    enum class Method {HOUGH_CIRCLES, BLOB, NOCV};
 
     /// Callback functions.
     /**
