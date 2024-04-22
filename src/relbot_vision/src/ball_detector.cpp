@@ -66,9 +66,9 @@ BallDetector::BallDetector() : Node("ball_detector") {
 std::tuple<float, float, float> toHSV(const std::tuple<int, int, int>& bgr) {
     // R, G, B values are divided by 255 
     // to change the range from 0..255 to 0..1 
-    float r = std::get<2>(bgr) / 255.0; 
-    float g = std::get<1>(bgr) / 255.0; 
     float b = std::get<0>(bgr) / 255.0; 
+    float g = std::get<1>(bgr) / 255.0; 
+    float r = std::get<2>(bgr) / 255.0; 
   
     // h, s, v = hue, saturation, value 
     float cmax = std::max({r, g, b}); // maximum of r, g, b 
@@ -101,13 +101,17 @@ std::tuple<float, float, float> toHSV(const std::tuple<int, int, int>& bgr) {
     // compute v 
     float v = cmax * 100;
 
-    return {h, s, v};
+    return {h / 2.0, s, v};
 }
 
 void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
 
     if (method == Method::NOCV) {
-        int step = 5; // Sampling step for pixels to reduce computations
+        sensor_msgs::msg::Image::SharedPtr debug_img = std::make_shared<sensor_msgs::msg::Image>();
+        image_functions::copyImageProperties(debug_img, img);
+        debug_img->data = img->data;
+
+        int step = 1; // Sampling step for pixels to reduce computations
         int greenPixelCount = 0;
 
         // Initialize bounding box coordinates to extreme values
@@ -118,8 +122,10 @@ void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
                 const auto [h, s, v] = toHSV(image_functions::getPixelChannels(img, x, y));
 
                 // Adjusted HSV range for a more specific shade of green and brightness/contrast conditions
-                if (h >= hue - 10 && h <= hue + 10 && s >= 25 && v >= 25) {
+                if (h >= hue - 10 && h <= hue + 10 && s >= 75 && v >= 20) {
                     greenPixelCount++;
+
+                    image_functions::setPixelColor(debug_img, x, y, 255, 0, 0);
                     minX = std::min(minX, x);
                     minY = std::min(minY, y);
                     maxX = std::max(maxX, x);
@@ -142,17 +148,21 @@ void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
             detection_pub->publish(ball_detection_msg);
 
             if (debug) {
-                sensor_msgs::msg::Image::SharedPtr debug_img = std::make_shared<sensor_msgs::msg::Image>();
-                image_functions::copyImageProperties(debug_img, img);
-                debug_img->data = img->data;
-
-                for (int x = minX; x >= maxX; x++) {
-                    image_functions::setPixelColor(debug_img, x, minY, 0, 0, 255);
-                    image_functions::setPixelColor(debug_img, x, maxY, 0, 0, 255);
+                for (unsigned int x = minX; x < maxX; x++) {
+                    for (int i = -2; i <= 2; i++) {
+                        if (minY + i >= 0 && minY + i < debug_img->width)
+                            image_functions::setPixelColor(debug_img, x, minY + i, 0, 0, 255);
+                        if (maxY + i >= 0 && maxY + i < debug_img->width)                            
+                            image_functions::setPixelColor(debug_img, x, maxY + i, 0, 0, 255);
+                    }
                 }
-                for (int y = minY; y >= maxY; y++) {
-                    image_functions::setPixelColor(debug_img, minX, y, 0, 0, 255);
-                    image_functions::setPixelColor(debug_img, maxX, y, 0, 0, 255);
+                for (unsigned int y = minY; y < maxY; y++) {
+                    for (int i = -2; i <= 2; i++) {
+                        if (minX + i >= 0 && minX + i < debug_img->width)
+                            image_functions::setPixelColor(debug_img, minX + i, y, 0, 0, 255);
+                        if (maxX + i >= 0 && maxX + i < debug_img->width)
+                            image_functions::setPixelColor(debug_img, maxX + i, y, 0, 0, 255);
+                    }
                 }
                 debugImage_pub->publish(*debug_img);
             }
