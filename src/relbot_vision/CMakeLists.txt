@@ -21,7 +21,10 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 
 include_directories(include)
 
-add_executable(ball_detector src/ball_detector.cpp)
+add_executable(ball_detector
+  src/ball_detector.cpp
+  src/method_nocv.cpp
+  src/utils.cpp)
 ament_target_dependencies(
   ball_detector
   rclcpp

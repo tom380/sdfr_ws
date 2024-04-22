@@ -42,6 +42,9 @@ private:
     // Decolourize everything that is not in mask
     cv::Mat colourMask(cv::Mat original_image, cv::Mat mask);
 
+    /// Detection method functions
+    relbot_vision::msg::BallDetection detect_nocv(const sensor_msgs::msg::Image::ConstSharedPtr& img);
+
     /// Private variables.
     bool debug;
     Method method;
