@@ -14,6 +14,7 @@ find_package(relbot_vision REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(example_interfaces REQUIRED)
+find_package(image_functions_sdfr REQUIRED)
 
 include_directories(include)
 
@@ -26,6 +27,7 @@ ament_target_dependencies(
   relbot_vision
   cv_bridge
   OpenCV
+  image_functions_sdfr
 )
 
 add_executable(differential_controller src/differential_controller.cpp)

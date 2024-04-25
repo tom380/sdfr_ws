@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <opencv2/opencv.hpp>
 #include <cv_bridge/cv_bridge.h>
+#include "image_functions_sdfr/image_functions.hpp"
 
 using std::placeholders::_1;
 
@@ -74,32 +75,56 @@ void VelocityController::detection_callback(relbot_vision::msg::BallDetection::C
     velocity_pub->publish(velocity_msg);
 }
 
+void drawbox(sensor_msgs::msg::Image::SharedPtr img, relbot_vision::msg::BoundingBox target_box){
+  
+    //x-coordinate of left-side of the box
+    int x_left = target_box.centre_x - (target_box.width/2);
+    //x-coordinate of right-side of the box
+    int x_right = target_box.centre_x + (target_box.width/2);
+    //y-coordinate of top-side of the box
+    int y_up = target_box.centre_y - (target_box.height/2);
+    //y-coordinate of down-side of the box
+    int y_down = target_box.centre_y + (target_box.height/2);
+
+    //draw top line of box
+    for (int x = x_left; x < x_right; x++) {
+        image_functions::setPixelColor(img, x,y_up,255,0,0);
+    }
+
+    //draw bottom line of box
+    for (int x = x_left; x < x_right; x++) {
+        image_functions::setPixelColor(img, x,y_down,255,0,0);
+    }
+
+    //draw left line of box
+    for (int y = y_up; y < y_down; y++) {
+        image_functions::setPixelColor(img, x_left,y,255,0,0);
+    }
+
+    //draw right line of box
+    for (int y = y_up; y < y_down; y++) {
+        image_functions::setPixelColor(img, x_right,y,255,0,0);
+    }
+
+}
+
 void VelocityController::image_callback(sensor_msgs::msg::Image::ConstSharedPtr image) {
-    // Convert ROS message to openCV image
-    cv_bridge::CvImagePtr cv_ptr;
-    try {
-        cv_ptr = cv_bridge::toCvCopy(image, image->encoding);
-    } catch (cv_bridge::Exception& e) {
-        RCLCPP_ERROR(this->get_logger(), "cv_bridge exception: %s", e.what());
-        return;
-    }
-
-    if (cv_ptr->encoding == "rgb8") {
-        cv::cvtColor(cv_ptr->image, cv_ptr->image, cv::COLOR_RGB2BGR);
-    }
-
-    // Calculate bounding box coordinates
-    cv::Point left_up(target_position - target_size/2, image->height/2 - target_size/2);
-    cv::Point right_down(target_position + target_size/2, image->height/2 + target_size/2);   
 
     // Draw target bounding box
-    cv::rectangle(cv_ptr->image, left_up, right_down, cv::Scalar(0, 0, 255), 3);
+    relbot_vision::msg::BoundingBox target_box;
+    target_box.centre_x = target_position;
+    target_box.centre_y = image->height/2;
+    target_box.height = target_size;
+    target_box.width = target_size;
 
-    cv::cvtColor(cv_ptr->image, cv_ptr->image, cv::COLOR_BGR2RGB);
-    cv_ptr->encoding = "rgb8";
-    sensor_msgs::msg::Image::SharedPtr msg = cv_ptr->toImageMsg();
-    debugImage_pub->publish(*msg);
+    sensor_msgs::msg::Image::SharedPtr debug_img = std::make_shared<sensor_msgs::msg::Image>();
+    image_functions::copyImageProperties(debug_img, image);
+    drawbox(debug_img,target_box);
+
+    //publish image
+    debugImage_pub->publish(*debug_img);
 }
+
 
 // The main function starts the node and "spins" it, i.e. handles all ROS2-related events such as receiving messages on topics
 // You rarely need to add anything else to this function for ROS2 nodes
