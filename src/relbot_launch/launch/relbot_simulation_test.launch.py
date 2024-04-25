@@ -19,11 +19,17 @@ def generate_launch_description():
         default_value='60.0',
         description='Hue of the ball'
     )
+    method_arg: DeclareLaunchArgument = DeclareLaunchArgument(
+        'method',
+        default_value='BLOB',
+        description='Detection method to detect the ball'
+    )
 
     return launch.LaunchDescription([
         linear_gain_arg,
         angular_gain_arg,
         hue_arg,
+        method_arg,
         DeclareLaunchArgument(
             'image_rosbag',
             default_value='',
@@ -41,7 +47,7 @@ def generate_launch_description():
             executable='ball_detector',
             parameters=[
                 {'image_topic': '/output/moving_camera'},
-                {'method': 'BLOB'},
+                {'method': LaunchConfiguration('method')},
                 {'hue': LaunchConfiguration('hue')},
                 {'debug': True}
             ],
