@@ -9,6 +9,8 @@
 #include "relbot_vision/ball_detector.hpp"
 #include <cv_bridge/cv_bridge.h>
 #include <stdexcept>
+#include <algorithm>
+#include "image_functions_sdfr/image_functions.hpp"
 
 using std::placeholders::_1;
 
@@ -62,6 +64,44 @@ BallDetector::BallDetector() : Node("ball_detector") {
 }
 
 void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
+
+    if (method == Method::NOCV) {
+        relbot_vision::msg::BallDetection ball_detection_msg = detect_nocv(img);
+        detection_pub->publish(ball_detection_msg);
+
+        if (debug) {
+            sensor_msgs::msg::Image::SharedPtr debug_img = std::make_shared<sensor_msgs::msg::Image>();
+            image_functions::copyImageProperties(debug_img, img);
+            debug_img->data = img->data;
+
+            int minX = ball_detection_msg.bounding_box.centre_x - ball_detection_msg.bounding_box.width / 2.0;
+            int maxX = ball_detection_msg.bounding_box.centre_x + ball_detection_msg.bounding_box.width / 2.0;
+            int minY = ball_detection_msg.bounding_box.centre_y - ball_detection_msg.bounding_box.height / 2.0;
+            int maxY = ball_detection_msg.bounding_box.centre_y + ball_detection_msg.bounding_box.height / 2.0;
+
+            for (int x = minX; x < maxX; x++) {
+                for (int i = -2; i <= 2; i++) {
+                    if (minY + i >= 0 && minY + i < (int)debug_img->width)
+                        image_functions::setPixelColor(debug_img, x, minY + i, 0, 0, 255);
+                    if (maxY + i >= 0 && maxY + i < (int)debug_img->width)                            
+                        image_functions::setPixelColor(debug_img, x, maxY + i, 0, 0, 255);
+                }
+            }
+            for (int y = minY; y < maxY; y++) {
+                for (int i = -2; i <= 2; i++) {
+                    if (minX + i >= 0 && minX + i < (int)debug_img->width)
+                        image_functions::setPixelColor(debug_img, minX + i, y, 0, 0, 255);
+                    if (maxX + i >= 0 && maxX + i < (int)debug_img->width)
+                        image_functions::setPixelColor(debug_img, maxX + i, y, 0, 0, 255);
+                }
+            }
+            debugImage_pub->publish(*debug_img);
+        }
+
+        return;
+    }
+
+
     // Convert ROS message to openCV image
     cv_bridge::CvImagePtr cv_ptr;
     try {
@@ -174,42 +214,6 @@ void BallDetector::image_callback(sensor_msgs::msg::Image::ConstSharedPtr img) {
         sensor_msgs::msg::Image::SharedPtr msg = cv_ptr->toImageMsg();
         debugImage_pub->publish(*msg);
     }
-}
-
-cv::Mat BallDetector::colourMask(cv::Mat original_image, cv::Mat mask) {
-    // Convert the original image to grayscale
-    cv::Mat gray_image;
-    cv::cvtColor(original_image, gray_image, cv::COLOR_BGR2GRAY);
-    // Convert back to BGR for bitwise operations
-    cv::cvtColor(gray_image, gray_image, cv::COLOR_GRAY2BGR);
-
-    // Initialize the result image
-    cv::Mat result = cv::Mat::zeros(original_image.size(), original_image.type());
-
-    // Apply the mask to the original image to get the colored regions
-    cv::Mat colored_parts;
-    cv::bitwise_and(original_image, original_image, colored_parts, mask);
-
-    // Invert the mask to combine with the grayscale image
-    cv::Mat inverted_mask;
-    cv::bitwise_not(mask, inverted_mask);
-
-    // Apply the inverted mask to the grayscale image to get the grayscale regions
-    cv::Mat gray_parts;
-    cv::bitwise_and(gray_image, gray_image, gray_parts, inverted_mask);
-
-    // Combine the two parts
-    cv::add(colored_parts, gray_parts, result);
-
-    return result;
-}
-
-BallDetector::Method BallDetector::stringToMethod(const std::string& mode) const {
-    // Return the matching method
-    if (mode == "HOUGH_CIRCLES") return Method::HOUGH_CIRCLES;
-    else if (mode == "BLOB") return Method::BLOB;
-    // If no matching method has been found throw invalid_argument error, to indicate wrong method
-    else throw std::invalid_argument("Unknown detection mode");
 }
 
 

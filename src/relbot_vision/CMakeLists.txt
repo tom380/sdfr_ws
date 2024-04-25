@@ -12,6 +12,7 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(image_functions_sdfr REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
 "msg/BoundingBox.msg"
@@ -20,13 +21,17 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 
 include_directories(include)
 
-add_executable(ball_detector src/ball_detector.cpp)
+add_executable(ball_detector
+  src/ball_detector.cpp
+  src/method_nocv.cpp
+  src/utils.cpp)
 ament_target_dependencies(
   ball_detector
   rclcpp
   sensor_msgs
   cv_bridge
   OpenCV
+  image_functions_sdfr
 )
 
 install(TARGETS
