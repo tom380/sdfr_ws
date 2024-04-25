@@ -15,7 +15,7 @@ relbot_vision::msg::BallDetection BallDetector::detect_nocv(const sensor_msgs::m
             const auto [h, s, v] = toHSV(image_functions::getPixelChannels(img, x, y));
 
             // Adjusted HSV range for a more specific shade of green and brightness/contrast conditions
-            if (h >= hue - 10 && h <= hue + 10 && s >= 75 && v >= 20) {
+            if (h >= hue - 10 && h <= hue + 10 && s >= 60 && v >= 20) {
                 greenPixelCount++;
                 minX = std::min(minX, x);
                 minY = std::min(minY, y);
