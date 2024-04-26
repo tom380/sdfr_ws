@@ -83,4 +83,44 @@ This ROS2 package contains nodes made for `Assignment 6.4` of the Software Devel
 
    - `showimage` from package `image_tools`  
       **Remapping**:  
+         - `/image` --> `/velocity_controller/debug_image`  
+&nbsp;
+
+`relbot_control.launch.py`: Runs the necessary control nodes, to control the RELbot. It shows the RELbot target, and makes it try to follow the ball.
+
+- **Arguments**
+   - `linear_gain`: Gain of size error to linear velocity  
+   Defaults to `0.01`
+   - `angular_gain`: Gain of position error to angular velocity  
+   Defaults to `0.005`
+   - `hue`: Hue of the ball  
+   Defaults to `150.0`
+   - `method`: Detection method to detect the ball  
+   Defaults to `NOCV`
+
+
+- **Launched nodes**
+   - `cam2image` from package `image_tools`
+   - `ball_detector` from package `relbot_vision`  
+      **Set parameters**:  
+         - image_topic: `/image`  
+         - method: `<method>`  
+         - hue: `<hue>`  
+         - debug: `true`   
+
+   - `velocity_controller` from package `relbot_control`  
+      **Set parameters**:  
+         - target_size: `80.0`  
+         - target_position: `160.0`  
+         - linear_gain: `<linear_gain>`  
+         - angular_gain: `<angular_gain>`  
+         - debug: `true`
+
+   - `differential_controller` from package `relbot_control`  
+      **Remappings**:  
+      - `/input/left_motor/setpoint_vel` --> `/left_motor/setpoint_vel`
+      - `/input/right_motor/setpoint_vel` --> `/right_motor/setpoint_vel`
+
+   - `showimage` from package `image_tools`  
+      **Remappings**:  
          - `/image` --> `/velocity_controller/debug_image`
