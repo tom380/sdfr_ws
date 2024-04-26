@@ -12,6 +12,7 @@ relbot_vision::msg::BallDetection BallDetector::detect_blob(const sensor_msgs::m
         throw new cv_bridge::Exception("cv_bridge exception: " + error_msg);
     }
 
+    // Convert to opencv bgr standard if picture is in rgb
     if (cv_ptr->encoding == "rgb8") {
         cv::cvtColor(cv_ptr->image, cv_ptr->image, cv::COLOR_RGB2BGR);
     }
@@ -37,7 +38,7 @@ relbot_vision::msg::BallDetection BallDetector::detect_blob(const sensor_msgs::m
     relbot_vision::msg::BallDetection ball_detection_msg;
     ball_detection_msg.found = false;
 
-    // Set bounding_box and found if circles have been found
+    // Set bounding box and found if keypoints have been found
     if (!keypoints.empty()) {
         // Assuming first keypoint is the ball
         const cv::KeyPoint& keypoint = keypoints[0];

@@ -11,6 +11,7 @@ relbot_vision::msg::BallDetection BallDetector::detect_houghCircles(const sensor
         throw new cv_bridge::Exception("cv_bridge exception: " + error_msg);
     }
 
+    // Convert to opencv bgr standard if picture is in rgb
     if (cv_ptr->encoding == "rgb8") {
         cv::cvtColor(cv_ptr->image, cv_ptr->image, cv::COLOR_RGB2BGR);
     }
@@ -35,7 +36,7 @@ relbot_vision::msg::BallDetection BallDetector::detect_houghCircles(const sensor
     relbot_vision::msg::BallDetection ball_detection_msg;
     ball_detection_msg.found = false;
 
-    // Set bounding_box and found if circles have been found
+    // Set bounding box and found if circles have been found
     if (!circles.empty()) {
         // Assuming first circle is the ball
         cv::Vec3f circle = circles[0];

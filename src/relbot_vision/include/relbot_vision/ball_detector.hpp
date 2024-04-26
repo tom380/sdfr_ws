@@ -39,7 +39,7 @@ private:
     /// Utility functions
     // Convert string to repective method
     Method stringToMethod(const std::string& mode) const;
-    // Decolourize everything that is not in mask
+    // Set parameters for the blob detector
     void setBlobDetector();
     // Generate debug image
     sensor_msgs::msg::Image::SharedPtr generateDebug(const sensor_msgs::msg::Image::ConstSharedPtr& img, const relbot_vision::msg::BoundingBox& boundingBox);
