@@ -67,8 +67,8 @@ This ROS2 package contains nodes made for `Assignment 6.4` of the Software Devel
    - `ball_detector` from package `relbot_vision`  
       **Set parameters**:  
          - image_topic: `/output/moving_camera`  
-         - method: `BLOB`  
-         - hue: `<method>`  
+         - method: `<method>`  
+         - hue: `<hue>`  
          - debug: `true`   
 
    - `velocity_controller` from package `relbot_control`  
@@ -82,8 +82,8 @@ This ROS2 package contains nodes made for `Assignment 6.4` of the Software Devel
    - `differential_controller` from package `relbot_control`  
 
    - `showimage` from package `image_tools`  
-      **Remapping**:  
-         - `/image` --> `/velocity_controller/debug_image`  
+      **Remappings**:           
+      - `/image` --> `/velocity_controller/debug_image`  
 &nbsp;
 
 `relbot_control.launch.py`: Runs the necessary control nodes, to control the RELbot. It shows the RELbot target, and makes it try to follow the ball.
