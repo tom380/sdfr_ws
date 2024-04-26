@@ -16,7 +16,7 @@ def generate_launch_description():
             executable='ball_detector',
             parameters=[
                 {'method': 'BLOB'},
-                {'hue': 20.0},
+                {'hue': 40.0},
                 {'debug': True}
             ],
             arguments=['--ros-args', '--log-level', 'WARN'],

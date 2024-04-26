@@ -16,7 +16,7 @@ def generate_launch_description():
     )
     hue_arg: DeclareLaunchArgument = DeclareLaunchArgument(
         'hue',
-        default_value='60.0',
+        default_value='120.0',
         description='Hue of the ball'
     )
     method_arg: DeclareLaunchArgument = DeclareLaunchArgument(
