@@ -1,3 +1,12 @@
+//=============================================
+// Filename    : method_nocv.cpp
+// Authors     : Tom Fransen & Lute Golbach
+// Group       : 9
+// License     : N.A.
+// Description : Ball detection method for the BallDetector node,
+//               does not make use of cvbridge/opencv
+//=============================================
+
 #include "relbot_vision/ball_detector.hpp"
 #include "image_functions_sdfr/image_functions.hpp"
 

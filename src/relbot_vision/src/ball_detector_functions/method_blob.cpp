@@ -1,3 +1,12 @@
+//=============================================
+// Filename    : method_blob.cpp
+// Authors     : Tom Fransen & Lute Golbach
+// Group       : 9
+// License     : N.A.
+// Description : Detection method for the BallDetector node,
+//               uses opencv's blob detection function.
+//=============================================
+
 #include "relbot_vision/ball_detector.hpp"
 #include <cv_bridge/cv_bridge.h>
 #include <string>

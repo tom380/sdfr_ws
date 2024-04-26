@@ -1,3 +1,11 @@
+//=============================================
+// Filename    : utils.cpp
+// Authors     : Tom Fransen & Lute Golbach
+// Group       : 9
+// License     : N.A.
+// Description : Utitlity functions for the BallDetector node
+//=============================================
+
 #include "relbot_vision/ball_detector.hpp"
 #include "image_functions_sdfr/image_functions.hpp"
 
