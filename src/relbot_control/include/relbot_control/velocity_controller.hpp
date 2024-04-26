@@ -30,6 +30,9 @@ private:
     void detection_callback(relbot_vision::msg::BallDetection::ConstSharedPtr detection);
     void image_callback(sensor_msgs::msg::Image::ConstSharedPtr image);
 
+    /// Utility functions
+    void drawbox(sensor_msgs::msg::Image::SharedPtr img, relbot_vision::msg::BoundingBox target_box);
+
     /// Private variables.
     bool debug;
     float target_size; // pixels

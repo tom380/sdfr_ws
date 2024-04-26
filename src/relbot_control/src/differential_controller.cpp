@@ -31,20 +31,21 @@ DifferentialController::DifferentialController() : Node("differential_controller
 }
 
 void DifferentialController::velocity_callback(geometry_msgs::msg::TwistStamped::ConstSharedPtr velocity){
-    double V = velocity->twist.linear.x;
-    double omega = velocity->twist.angular.z;
+    // Set linear and angular velocity
+    const double& V = velocity->twist.linear.x;
+    const double& omega = velocity->twist.angular.z;
 
-    // if (V < 0.001) V = 0;
-    // if (omega < 0.01) omega = 0;
-
+    // Calculate motor speeds
     example_interfaces::msg::Float64 leftMotor_msg;
     leftMotor_msg.data = (V - omega * width / 2.0) / wheel_radius;
     example_interfaces::msg::Float64 rightMotor_msg;
     rightMotor_msg.data = (V + omega * width / 2.0) / wheel_radius;
 
+    // Publish motor speeds
     leftMotor_pub->publish(leftMotor_msg);
     rightMotor_pub->publish(rightMotor_msg);
 
+    // Indicate when the target is reached 
     RCLCPP_INFO_EXPRESSION(this->get_logger(),leftMotor_msg.data == 0 && rightMotor_msg.data == 0, "Target reached, motors turned off");
 }
 
