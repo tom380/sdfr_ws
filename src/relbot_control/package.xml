@@ -2,10 +2,11 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>relbot_control</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="t.w.j.fransen@student.utwente.nl">twjfr</maintainer>
-  <license>TODO: License declaration</license>
+  <version>1.0.0</version>
+  <description>This package serves as a control toolbox for relbot. It contains anything control related needed to solve assignment 6 of the Software Development for Robotics course.</description>
+  <maintainer email="t.w.j.fransen@student.utwente.nl">Tom Fransen</maintainer>
+  <maintainer email="l.a.golbach-1@student.utwente.nl">Lute Golbach</maintainer>
+  <license>BSD</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
