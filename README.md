@@ -32,3 +32,8 @@ For this assignment the node `ball_detector` was made, more information and the 
 
 ### 4 Controlling RELbot in simulation
 For this assignment two nodes were made, `velocity_controller` and `differential_controller`, more information and the execution of these nodes can be found in the `relbot_control` package [README.md](src/relbot_control/README.md). For this assignment there were also launch files made. `velocity_response_test.launch.py`, which executes a velocity response test. And `relbot_simulation_test.launch.py`, which runs the control nodes and starts a the RELbot simulation. More information for these launch files can be found in the `relbot_launch` package [README.md](src/relbot_launch/README.md).
+
+### 5 Controlling RELbot
+For this assignment one launch file was added, `relbot_control.launch.py`, to launch all the right nodes needed to control the relbot with the right settings. More information for this launch file can be found in the `relbot_launch` package [README.md](src/relbot_launch/README.md).
+
+To run the control on the RELbot, first launch the RELbot drivers as shown in the student manual. Then launch the `relbot_control.launch.py` launch file. When all nodes have start up you see the debug video with a target and can put the ball in the camera's field of view. The RELbot will drive towards the ball and try to keep it on the target.
