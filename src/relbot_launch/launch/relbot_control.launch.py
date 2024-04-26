@@ -30,12 +30,6 @@ def generate_launch_description():
         angular_gain_arg,
         hue_arg,
         method_arg,
-        DeclareLaunchArgument(
-            'image_rosbag',
-            default_value='',
-            description='Path to the rosbag file containing image data'
-        ),
-        OpaqueFunction(function=lambda context: launch_setup(context)),
         launch_ros.actions.Node(
             package='image_tools',
             executable='cam2image',
@@ -87,15 +81,3 @@ def generate_launch_description():
             output='log'
         )
     ])
-
-def launch_setup(context):
-    image_rosbag = LaunchConfiguration('image_rosbag').perform(context)
-    actions = []
-    if image_rosbag:
-        actions.append(
-            ExecuteProcess(
-                cmd=['ros2', 'bag', 'play', image_rosbag, '--loop'],
-                output='log'
-            )
-        )
-    return actions
