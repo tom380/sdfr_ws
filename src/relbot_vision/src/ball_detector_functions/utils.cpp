@@ -40,6 +40,10 @@ sensor_msgs::msg::Image::SharedPtr BallDetector::generateDebug(const sensor_msgs
     image_functions::copyImageProperties(debug_img, img);
     debug_img->data = img->data;
 
+    // Get image width and height
+    const unsigned int& width = debug_img->width;
+    const unsigned int& height = debug_img->height;
+
     // Calculate the corners of the bounding box
     const int minX = bounding_box.centre_x - bounding_box.width / 2.0;
     const int maxX = bounding_box.centre_x + bounding_box.width / 2.0;
@@ -47,27 +51,28 @@ sensor_msgs::msg::Image::SharedPtr BallDetector::generateDebug(const sensor_msgs
     const int maxY = bounding_box.centre_y + bounding_box.height / 2.0;
 
     // Draw horizontal lines
-    for (int x = minX; x < maxX; x++) {
+    for (int x = (minX < 0 ? 0 : minX); x < (maxX > (int)width ? (int)width : maxX); x++) {
         // Draw with a thickness of 5 pixels
         for (int i = -2; i <= 2; i++) {
             // Draw bottom line
-            if (minY + i >= 0 && minY + i < (int)debug_img->width)
+            if (minY + i >= 0 && minY + i < (int)height)
                 image_functions::setPixelColor(debug_img, x, minY + i, 0, 0, 255);
             // Draw top line
-            if (maxY + i >= 0 && maxY + i < (int)debug_img->width)                            
+            if (maxY + i >= 0 && maxY + i < (int)height)                            
                 image_functions::setPixelColor(debug_img, x, maxY + i, 0, 0, 255);
         }
     }
     // Draw vertical lines
-    for (int y = minY; y < maxY; y++) {
+    for (int y = (minY < 0 ? 0 : minY); y < (maxY > (int)height ? (int)height : maxY); y++) {
         // Draw with a thickness of 5 pixels
         for (int i = -2; i <= 2; i++) {
             // Draw left line
-            if (minX + i >= 0 && minX + i < (int)debug_img->width)
+            if (minX + i >= 0 && minX + i < (int)width)
                 image_functions::setPixelColor(debug_img, minX + i, y, 0, 0, 255);
             // Draw right line
-            if (maxX + i >= 0 && maxX + i < (int)debug_img->width)
+            if (maxX + i >= 0 && maxX + i < (int)width)
                 image_functions::setPixelColor(debug_img, maxX + i, y, 0, 0, 255);
+
         }
     }
 
