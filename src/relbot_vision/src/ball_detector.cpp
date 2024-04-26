@@ -31,10 +31,10 @@ BallDetector::BallDetector() : Node("ball_detector") {
     this->get_parameter("debug", debug);
 
     // Set hue for blob detection
-    this->declare_parameter<double>("hue", 60);
+    this->declare_parameter<double>("hue", 120);
     this->get_parameter("hue", hue);
     // Throw error if hue is not between openCV hue range
-    if (hue < 0 || hue > 180) throw std::invalid_argument("Hue value out of colour range, should be between 0 and 180");
+    if (hue < 0 || hue > 360) throw std::invalid_argument("Hue value out of colour range, should be between 0 and 360");
 
 
     // Subscribe to topics

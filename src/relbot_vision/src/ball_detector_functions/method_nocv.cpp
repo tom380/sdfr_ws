@@ -28,7 +28,7 @@ relbot_vision::msg::BallDetection BallDetector::detect_nocv(const sensor_msgs::m
             const auto [h, s, v] = toHSV(image_functions::getPixelChannels(img, x, y));
 
             // Check if pixel values lies within tresholds
-            if (h >= hue - 10 && h <= hue + 10 && s >= 60 && v >= 20) {
+            if (h >= hue - 20 && h <= hue + 20 && s >= 60 && v >= 20) {
                 // Add to pixel counter
                 foundPixelCount++;
 
@@ -87,6 +87,6 @@ std::tuple<float, float, float> toHSV(const std::tuple<int, int, int>& bgr) {
     if (cmax != 0)
         s = (diff / cmax) * 100;
 
-    // Return hsv, h is divided by 2 to match cv standard
-    return {h / 2.0, s, v};
+    // Return hsv
+    return {h, s, v};
 }

@@ -32,7 +32,7 @@ relbot_vision::msg::BallDetection BallDetector::detect_blob(const sensor_msgs::m
 
     // Create mask based on colour
     cv::Mat mask;
-    cv::inRange(hsv_image, cv::Scalar(hue - 10, 128, 50), cv::Scalar(hue + 10, 255, 255), mask);
+    cv::inRange(hsv_image, cv::Scalar((hue - 20) / 2.0f, 128, 50), cv::Scalar((hue + 20) / 2.0f, 255, 255), mask);
 
     // Clean-up mask
     cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE,cv::Size(5,5));
