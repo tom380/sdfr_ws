@@ -29,3 +29,6 @@ For this assignment two nodes were made, `brightness_detection` and `brightness_
 
 ### 3 Ball Detection
 For this assignment the node `ball_detector` was made, more information and the execution of this node can be found in the `relbot_vision` package [README.md](src/relbot_vision/README.md).
+
+### 4 Controlling RELbot in simulation
+For this assignment two nodes were made, `velocity_controller` and `differential_controller`, more information and the execution of these nodes can be found in the `relbot_control` package [README.md](src/relbot_control/README.md). For this assignment there were also launch files made. `velocity_response_test.launch.py`, which executes a velocity response test. And `relbot_simulation_test.launch.py`, which runs the control nodes and starts a the RELbot simulation. More information for these launch files can be found in the `relbot_launch` package [README.md](src/relbot_launch/README.md).
