@@ -3,7 +3,7 @@
 <package format="3">
   <name>relbot_launch</name>
   <version>1.0.0</version>
-  <description>This is a package to launch nodes made for the relbot in different ways</description>
+  <description>This is a package to launch related nodes made for the RELbot, to activate or test different functionalies. It contains launch files for different tests for assignment 6 of the Software Development for Robotics course.</description>
   <maintainer email="t.w.j.fransen@student.utwente.nl">Tom Fransen</maintainer>
   <maintainer email="l.a.golbach-1@student.utwente.nl">Lute Golbach</maintainer>
   <license>BSD</license>
