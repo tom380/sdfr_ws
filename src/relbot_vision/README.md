@@ -46,7 +46,7 @@ This ROS2 package contains nodes made for `Assignment 6.3` of the Software Devel
 
 - **Publishes to**  
   - `/ball_detector/detection` of type [`relbot_vision/msg/BallDetection`](../relbot_vision/msg/BallDetection.msg)  
-  - `/ball_detector/debug_image` of type [`example_interfaces/msg/String`](http://docs.ros.org/en/api/sensor_msgs/html/msg/Image.html)
+  - `/ball_detector/debug_image` of type [`sensor_msgs/msg/Image`](http://docs.ros.org/en/api/sensor_msgs/html/msg/Image.html)
 
 - **Parameters**
   - `image_topic`: Topic that the node subscribes to for image data of the ball.  
