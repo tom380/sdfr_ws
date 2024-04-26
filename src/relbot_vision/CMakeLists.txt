@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.12)
 project(relbot_vision)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -21,10 +21,12 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 
 include_directories(include)
 
+file(GLOB ball_detector_functions CONFIGURE_DEPENDS
+  "src/ball_detector_functions/*.cpp")
+
 add_executable(ball_detector
   src/ball_detector.cpp
-  src/method_nocv.cpp
-  src/utils.cpp)
+  ${ball_detector_functions})
 ament_target_dependencies(
   ball_detector
   rclcpp
