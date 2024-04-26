@@ -11,22 +11,18 @@ find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(relbot_vision REQUIRED)
-find_package(cv_bridge REQUIRED)
-find_package(OpenCV REQUIRED)
 find_package(example_interfaces REQUIRED)
 find_package(image_functions_sdfr REQUIRED)
 
 include_directories(include)
 
-add_executable(velocity_controller src/velocity_controller.cpp)
+add_executable(velocity_controller src/velocity_controller.cpp src/drawbox.cpp)
 ament_target_dependencies(
   velocity_controller
   rclcpp
   geometry_msgs
   sensor_msgs
   relbot_vision
-  cv_bridge
-  OpenCV
   image_functions_sdfr
 )
 

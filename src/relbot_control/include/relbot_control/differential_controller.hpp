@@ -28,7 +28,9 @@ private:
     void velocity_callback(geometry_msgs::msg::TwistStamped::ConstSharedPtr velocity);
 
     /// Private variables.
+    // Distance between wheels
     double width;
+    // Wheel radius
     double wheel_radius;
 
     /// Subscriber variables.

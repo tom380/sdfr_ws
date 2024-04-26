@@ -46,17 +46,17 @@ This ROS2 package contains nodes made for `Assignment 6.3` of the Software Devel
 
 - **Publishes to**  
   - `/ball_detector/detection` of type [`relbot_vision/msg/BallDetection`](../relbot_vision/msg/BallDetection.msg)  
-  - `/ball_detector/debug_image` of type [`example_interfaces/msg/String`](http://docs.ros.org/en/api/sensor_msgs/html/msg/Image.html)
+  - `/ball_detector/debug_image` of type [`sensor_msgs/msg/Image`](http://docs.ros.org/en/api/sensor_msgs/html/msg/Image.html)
 
 - **Parameters**
   - `image_topic`: Topic that the node subscribes to for image data of the ball.  
   Defaults to `/image`
-  - `method`: Method of detecting the ball. Currently the only methods are `HOUGH_CIRCLES` and `BLOB`.  
+  - `method`: Method of detecting the ball. Currently the only methods are `HOUGH_CIRCLES`, `BLOB` and `NOCV`.  
   Defaults to `BLOB`
   - `debug`: Whether to publish a debug image or not. Should either be `true` or `false`  
   Defaults to `false`
-  - `hue`: Hue of the ball. Should be in the range of `0-180`.  
-  Defaults to `60` (green)
+  - `hue`: Hue of the ball. Should be in the range of `0-360`.  
+  Defaults to `120` (green)
 
 - **Execution**
   ```bash

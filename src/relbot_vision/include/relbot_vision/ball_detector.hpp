@@ -39,11 +39,15 @@ private:
     /// Utility functions
     // Convert string to repective method
     Method stringToMethod(const std::string& mode) const;
-    // Decolourize everything that is not in mask
-    cv::Mat colourMask(cv::Mat original_image, cv::Mat mask);
+    // Set parameters for the blob detector
+    void setBlobDetector();
+    // Generate debug image
+    sensor_msgs::msg::Image::SharedPtr generateDebug(const sensor_msgs::msg::Image::ConstSharedPtr& img, const relbot_vision::msg::BoundingBox& boundingBox);
 
     /// Detection method functions
     relbot_vision::msg::BallDetection detect_nocv(const sensor_msgs::msg::Image::ConstSharedPtr& img);
+    relbot_vision::msg::BallDetection detect_houghCircles(const sensor_msgs::msg::Image::ConstSharedPtr& img);
+    relbot_vision::msg::BallDetection detect_blob(const sensor_msgs::msg::Image::ConstSharedPtr& img);
 
     /// Private variables.
     bool debug;
