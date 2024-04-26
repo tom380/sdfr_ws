@@ -11,8 +11,6 @@ find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(relbot_vision REQUIRED)
-find_package(cv_bridge REQUIRED)
-find_package(OpenCV REQUIRED)
 find_package(example_interfaces REQUIRED)
 find_package(image_functions_sdfr REQUIRED)
 
@@ -25,8 +23,6 @@ ament_target_dependencies(
   geometry_msgs
   sensor_msgs
   relbot_vision
-  cv_bridge
-  OpenCV
   image_functions_sdfr
 )
 

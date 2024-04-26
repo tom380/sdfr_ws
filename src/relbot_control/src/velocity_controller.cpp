@@ -9,8 +9,6 @@
 #include "relbot_control/velocity_controller.hpp"
 #include <stdexcept>
 #include <algorithm>
-#include <opencv2/opencv.hpp>
-#include <cv_bridge/cv_bridge.h>
 #include "image_functions_sdfr/image_functions.hpp"
 
 using std::placeholders::_1;
